@@ -1,0 +1,290 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard-InventarisKu</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: black;
+            color: white;
+            font-family: Arial, sans-serif;
+            min-height: 100vh;
+        }
+
+        
+        .header {
+            background-color: cadetblue;
+            height: 65px;
+            padding: 0 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-radius: 15px 15px 0 0;
+        }
+
+        .header svg {
+            width: 22px;
+            height: 22px;
+        }
+
+        .header h2 {
+            font-size: 20px;
+        }
+
+       
+        .container {
+            display: flex;
+            min-height: calc(100vh - 65px);
+        }
+
+        
+        .sidebar {
+            width: 145px;
+            flex-shrink: 0;
+            padding: 25px 20px;
+        }
+
+        .sidebar h3 {
+            font-size: 14px;
+            margin-bottom: 12px;
+            color: #ddd;
+        }
+
+        .sidebar a {
+            display: block;
+            color: #ddd;
+            text-decoration: none;
+            font-size: 14px;
+            margin-bottom: 13px;
+            white-space: nowrap;
+        }
+
+        .sidebar a:hover,
+        .sidebar a.active {
+            color: cadetblue;
+        }
+
+        
+        .main-content {
+            flex: 1;
+            min-width: 0;
+            padding: 18px 12px 30px 10px;
+        }
+
+        .main-content h1 {
+            font-size: 22px;
+            margin-bottom: 20px;
+        }
+
+        .subtitle {
+            color: #ccc;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .stat-card {
+            border: 1px solid #292929;
+            border-radius: 11px;
+            padding: 12px 10px;
+            min-height: 82px;
+        }
+
+        .stat-card p {
+            color: #ccc;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .stat-card h2 {
+            font-size: 25px;
+        }
+
+        
+        .recent {
+            border: 1px solid #292929;
+            border-radius: 11px;
+            padding: 12px 10px;
+        }
+
+        .recent h3 {
+            font-size: 16px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #181818;
+            margin-bottom: 15px;
+        }
+
+        .recent p {
+            font-size: 14px;
+            margin-bottom: 13px;
+        }
+
+      
+        .logout {
+            color: #ff7777 !important;
+            margin-top: 25px;
+        }
+
+       
+        @media (max-width: 600px) {
+
+            .sidebar {
+                width: 120px;
+                padding: 20px 10px;
+            }
+
+            .main-content {
+                padding: 20px 10px;
+            }
+
+            .main-content h1 {
+                font-size: 20px;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            .stat-card {
+                min-height: 75px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    
+    <div class="header">
+
+        <svg viewBox="0 0 24 24"
+             fill="none"
+             stroke="white"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round">
+
+            <path d="M12 2 3 7v10l9 5 9-5V7l-9-5z"/>
+            <path d="m3 7 9 5 9-5"/>
+            <path d="M12 12v10"/>
+
+        </svg>
+
+        <h2>InventarisKu</h2>
+
+    </div>
+
+    
+    <div class="container">
+
+       
+        <aside class="sidebar">
+
+            <h3>MENU</h3>
+
+            <a href="dashboard.html" class="active">
+                ▦ Dashboard
+            </a>
+
+            <a href="iventaris.html">
+                ▤ Inventaris
+            </a>
+
+            <a href="peminjaman.html">
+                ⇄ Peminjaman
+            </a>
+
+            <a href="riwayat.html">
+                ◷ Riwayat
+            </a>
+
+            <a href="#" class="logout" onclick="logout()">
+                ⇥ Logout
+            </a>
+
+        </aside>
+
+        <main class="main-content">
+
+            <h1>Dashboard</h1>
+
+            <p class="subtitle">
+                Ringkasan inventaris saat ini
+            </p>
+
+            
+            <div class="stats">
+
+                <div class="stat-card">
+                    <p>Total Barang</p>
+                    <h2>24</h2>
+                </div>
+
+                <div class="stat-card">
+                    <p>Tersedia</p>
+                    <h2>18</h2>
+                </div>
+
+                <div class="stat-card">
+                    <p>Dipinjam</p>
+                    <h2>4</h2>
+                </div>
+
+                <div class="stat-card">
+                    <p>Menunggu</p>
+                    <h2>2</h2>
+                </div>
+
+            </div>
+
+            <div class="recent">
+
+                <h3>Peminjaman Terbaru</h3>
+
+                <p>Andi — Laptop</p>
+
+                <p>Siti — Proyektor</p>
+
+                <p>Budi — Kamera</p>
+
+            </div>
+
+        </main>
+
+    </div>
+
+    <script>
+
+        if (sessionStorage.getItem("login") !== "berhasil") {
+            window.location.href = "login.html";
+        }
+
+        function logout() {
+
+            sessionStorage.removeItem("login");
+            sessionStorage.removeItem("username");
+
+            window.location.href = "login.html";
+
+        }
+
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Peminjaman - InventarisKu</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: black;
+            color: white;
+            font-family: Arial, sans-serif;
+            min-height: 100vh;
+        }
+
+        .header {
+            background-color: cadetblue;
+            height: 65px;
+            padding: 0 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-radius: 15px 15px 0 0;
+        }
+
+        .header svg {
+            width: 22px;
+            height: 22px;
+        }
+
+        .header h2 {
+            font-size: 20px;
+        }
+
+        .container {
+            display: flex;
+            min-height: calc(100vh - 65px);
+        }
+
+        .sidebar {
+            width: 145px;
+            flex-shrink: 0;
+            padding: 25px 20px;
+        }
+
+        .sidebar h3 {
+            font-size: 14px;
+            margin-bottom: 12px;
+            color: #ddd;
+        }
+
+        .sidebar a {
+            display: block;
+            color: #ddd;
+            text-decoration: none;
+            font-size: 14px;
+            margin-bottom: 13px;
+            white-space: nowrap;
+        }
+
+        .sidebar a:hover,
+        .sidebar a.active {
+            color: cadetblue;
+        }
+
+        .logout {
+            color: #ff7777 !important;
+            margin-top: 25px;
+        }
+
+        .main-content {
+            flex: 1;
+            min-width: 0;
+            padding: 10px;
+        }
+
+        .peminjaman-container {
+            border: 1px solid #292929;
+            border-radius: 15px;
+            padding: 15px;
+        }
+
+        .peminjaman-container h2 {
+            font-size: 22px;
+            margin-bottom: 19px;
+        }
+
+        .toolbar {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 14px;
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 14px 12px;
+            background: transparent;
+            border: 1px solid #333;
+            border-radius: 11px;
+            color: white;
+            font-size: 16px;
+            outline: none;
+        }
+
+        .search-box input:focus {
+            border-color: cadetblue;
+        }
+
+        .search-box input::placeholder {
+            color: #bbb;
+        }
+
+        .btn-tambah {
+            background-color: #287bbd;
+            border: none;
+            border-radius: 11px;
+            padding: 0 15px;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .btn-tambah:hover {
+            background-color: cadetblue;
+        }
+
+        .table-container {
+            width: 100%;
+            overflow-x: auto;
+            border: 1px solid #292929;
+            border-radius: 11px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 500px;
+        }
+
+        th {
+            text-align: left;
+            font-size: 12px;
+            padding: 11px;
+            border-bottom: 1px solid #292929;
+            color: #ccc;
+        }
+
+        td {
+            padding: 13px 11px;
+            border-bottom: 1px solid #181818;
+            font-size: 15px;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tbody tr:hover {
+            background-color: #171717;
+        }
+
+        .status {
+            font-size: 12px;
+            padding: 4px 8px;
+            border-radius: 6px;
+        }
+
+        .status-dipinjam {
+            color: #ffc107;
+            border: 1px solid #ffc107;
+        }
+
+        .status-menunggu {
+            color: #17a2b8;
+            border: 1px solid #17a2b8;
+        }
+
+        .btn-kembali {
+            background-color: transparent;
+            border: 1px solid #00d084;
+            color: #00d084;
+            padding: 6px 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+        }
+
+        .btn-kembali:hover {
+            background-color: #00d084;
+            color: black;
+        }
+
+        .empty {
+            text-align: center;
+            color: #aaa;
+            padding: 20px;
+        }
+
+        @media (max-width: 600px) {
+            .sidebar {
+                width: 120px;
+                padding: 20px 10px;
+            }
+
+            .main-content {
+                padding: 10px 5px;
+            }
+
+            .peminjaman-container h2 {
+                font-size: 19px;
+            }
+
+            .toolbar {
+                flex-wrap: wrap;
+            }
+
+            .search-box {
+                flex-basis: 100%;
+            }
+
+            .btn-tambah {
+                padding: 12px;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2 3 7v10l9 5 9-5V7l-9-5z"/>
+            <path d="m3 7 9 5 9-5"/>
+            <path d="M12 12v10"/>
+        </svg>
+        <h2>InventarisKu</h2>
+    </div>
+
+    <div class="container">
+        <aside class="sidebar">
+            <h3>MENU</h3>
+            <a href="dashboard.html">▦ Dashboard</a>
+            <a href="inventaris.html">▤ Inventaris</a>
+            <a href="peminjaman.html" class="active">⇄ Peminjaman</a>
+            <a href="riwayat.html">◷ Riwayat</a>
+            <a href="#" class="logout" onclick="logout()">⇥ Logout</a>
+        </aside>
+
+        <main class="main-content">
+            <div class="peminjaman-container">
+                <h2>Kelola Peminjaman</h2>
+
+                <div class="toolbar">
+                    <div class="search-box">
+                        <input type="text" id="searchInput" placeholder="⌕ Cari peminjam / barang..." oninput="tampilkanPeminjaman()">
+                    </div>
+                    <button class="btn-tambah" onclick="tambahPeminjaman()">+ Pinjam Barang</button>
+                </div>
+
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Peminjam</th>
+                                <th>Barang</th>
+                                <th>Tgl Pinjam</th>
+                                <th>Status</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabelPeminjaman"></tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        if (sessionStorage.getItem("login") !== "berhasil") {
+            window.location.href = "login.html";
+        }
+
+        let peminjaman = JSON.parse(localStorage.getItem("peminjaman"));
+        let riwayat = JSON.parse(localStorage.getItem("riwayat")) || [];
+
+        if (peminjaman === null) {
+            peminjaman = [
+                { id: 1, peminjam: "Andi", barang: "Laptop", tglPinjam: "2026-03-01", status: "Dipinjam" },
+                { id: 2, peminjam: "Siti", barang: "Proyektor", tglPinjam: "2026-03-02", status: "Dipinjam" },
+                { id: 3, peminjam: "Budi", barang: "Kamera", tglPinjam: "2026-03-03", status: "Menunggu" }
+            ];
+            simpanPeminjaman();
+        }
+
+        function simpanPeminjaman() {
+            localStorage.setItem("peminjaman", JSON.stringify(peminjaman));
+        }
+
+        function simpanRiwayat() {
+            localStorage.setItem("riwayat", JSON.stringify(riwayat));
+        }
+
+        function tampilkanPeminjaman() {
+            let tabel = document.getElementById("tabelPeminjaman");
+            let pencarian = document.getElementById("searchInput").value.toLowerCase();
+            tabel.innerHTML = "";
+
+            let jumlah = 0;
+
+            for (let i = 0; i < peminjaman.length; i++) {
+                let item = peminjaman[i];
+                if (!item.peminjam.toLowerCase().includes(pencarian) && !item.barang.toLowerCase().includes(pencarian)) {
+                    continue;
+                }
+
+                jumlah++;
+                let baris = document.createElement("tr");
+
+                let statusClass = item.status === "Dipinjam" ? "status-dipinjam" : "status-menunggu";
+
+                baris.innerHTML = `
+                    <td>${item.peminjam}</td>
+                    <td>${item.barang}</td>
+                    <td>${item.tglPinjam}</td>
+                    <td><span class="status ${statusClass}">${item.status}</span></td>
+                    <td>
+                        <button class="btn-kembali" onclick="kembalikanBarang(${i})">Kembalikan</button>
+                    </td>
+                `;
+
+                tabel.appendChild(baris);
+            }
+
+            if (jumlah === 0) {
+                tabel.innerHTML = `<tr><td colspan="5" class="empty">Tidak ada peminjaman aktif</td></tr>`;
+            }
+        }
+
+        function tambahPeminjaman() {
+            let peminjam = prompt("Masukkan nama peminjam:");
+            if (!peminjam || peminjam.trim() === "") return;
+
+            let barang = prompt("Masukkan nama barang yang dipinjam:");
+            if (!barang || barang.trim() === "") return;
+
+            let tglToday = new Date().toISOString().split('T')[0];
+
+            peminjaman.push({
+                id: Date.now(),
+                peminjam: peminjam.trim(),
+                barang: barang.trim(),
+                tglPinjam: tglToday,
+                status: "Dipinjam"
+            });
+
+            simpanPeminjaman();
+            tampilkanPeminjaman();
+            alert("Peminjaman berhasil ditambahkan!");
+        }
+
+        function kembalikanBarang(index) {
+            let item = peminjaman[index];
+            let konfirmasi = confirm(`Kembalikan barang ${item.barang} yang dipinjam oleh ${item.peminjam}?`);
+
+            if (konfirmasi) {
+                let tglKembali = new Date().toISOString().split('T')[0];
+                
+                // Tambahkan ke data riwayat
+                riwayat.push({
+                    peminjam: item.peminjam,
+                    barang: item.barang,
+                    tglPinjam: item.tglPinjam,
+                    tglKembali: tglKembali,
+                    status: "Selesai"
+                });
+
+                // Hapus dari daftar peminjaman aktif
+                peminjaman.splice(index, 1);
+
+                simpanPeminjaman();
+                simpanRiwayat();
+                tampilkanPeminjaman();
+                alert("Barang berhasil dikembalikan dan masuk ke Riwayat!");
+            }
+        }
+
+        function logout() {
+            sessionStorage.removeItem("login");
+            sessionStorage.removeItem("username");
+            window.location.href = "login.html";
+        }
+
+        tampilkanPeminjaman();
+    </script>
+</body>
+</html>
